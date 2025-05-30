@@ -1,16 +1,50 @@
-# This is a sample Python script.
+from Data import Data
 
-# Press Ctrl+F5 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+class Main():
+
+    def preload_data(self):
+        return Data.load_data()
+
+    def menu_interact(self):
+        airline, ticket_handler = self.preload_data()
+        while True:
+            print("\n Repülőjegy foglalás Menü")
+            print("1. Járatok listázása")
+            print("2. Lefoglalt jegyek listázása")
+            print("3. Jegy vétel")
+            print("4. Jegy lemondása")
+            print("0. Kilépés")
+
+            menu_input = input("Válasszon a lehetőségek közül: ")
+
+            if menu_input == "1":  # Járatok listázása
+                for f in airline.list_flights(ticket_handler):
+                    print(f)
+
+            elif menu_input == "2": # Jegyek listázása
+                for b in ticket_handler.list_bookings():
+                    print(b)
+
+            elif menu_input == "3": # Jegy vétele
+                flight_number = input("Írja be a járat számát: ")
+                date = input("Írja be a dátumot (YYYY-MM-DD) formátumban: ")
+                flight = airline.get_flight(flight_number)
+                if flight:
+                    print(ticket_handler.book_ticket(flight, date))
+                else:
+                    print("Hiba: Járat nem található!")
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press F9 to toggle the breakpoint.
+            elif menu_input == "4": # Jegy lemondása
+                flight_number = input("Írja be a járat számát: ")
+                date = input("Írja be a dátumot (YYYY-MM-DD) formátumban: ")
+                print(ticket_handler.cancel_ticket(flight_number, date))
 
+            elif menu_input == "0": # Kilépés
+                print("Kilépés")
+                break
+            else:
+                print("Érvénytelen szám")
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+usermenu = Main()
+usermenu.menu_interact()
